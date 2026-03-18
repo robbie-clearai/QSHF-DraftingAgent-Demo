@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check for Existing Copies | QSHF</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #bf1e2e;
+      --red-dark: #9e1824;
+      --red-hover: #d61440;
+      --orange: #fe8500;
+      --teal: #10b8c7;
+      --dark: #222222;
+      --gray-dark: #3c3c3c;
+      --gray-mid: #555555;
+      --gray-light: #f2f2f2;
+      --gray-border: #e7e7e7;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background: var(--gray-light);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--dark);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      border-bottom: 4px solid var(--red);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+    }
+
+    .logo-text {
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .logo-text span {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: #aaa;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .header-clearai-text {
+      font-family: 'Thorndale AMT', 'Thorndale', 'Times New Roman', Times, serif;
+      font-weight: 400;
+      font-size: 22px;
+      color: var(--white);
+      letter-spacing: 0.01em;
+      user-select: none;
+    }
+
+    .api-error-card {
+      background: #fff5f5;
+      border: 2px solid var(--red);
+      border-radius: 8px;
+      padding: 28px 32px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .api-error-card svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--red);
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .api-error-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--red);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .api-error-card p {
+      font-size: 14px;
+      color: var(--gray-dark);
+      line-height: 1.6;
+    }
+
+    .api-error-card a {
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    /* ── Main layout ── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--gray-mid);
+      margin-bottom: 40px;
+    }
+
+    /* ── Upload card ── */
+    .card {
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 36px 40px;
+      margin-bottom: 32px;
+    }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+
+    /* ── Drop zone ── */
+    .drop-zone {
+      border: 2px dashed var(--gray-border);
+      border-radius: 8px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.dragover {
+      border-color: var(--red);
+      background: #fdf5f6;
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .drop-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 14px;
+      background: #fdecea;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drop-icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: var(--red);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .drop-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .drop-hint {
+      font-size: 13px;
+      color: #999;
+    }
+
+    .file-selected {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #f0fafb;
+      border: 1px solid var(--teal);
+      border-radius: 6px;
+      margin-top: 16px;
+    }
+
+    .file-selected.visible { display: flex; }
+
+    .file-selected svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--teal);
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .file-selected-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-dark);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-clear {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #999;
+      font-size: 18px;
+      line-height: 1;
+      padding: 0 2px;
+      transition: color 0.15s;
+    }
+    .file-clear:hover { color: var(--red); }
+
+    /* ── Submit button ── */
+    .submit-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 24px;
+      padding: 15px 28px;
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:hover:not(:disabled) { background: var(--red-hover); }
+    .submit-btn:active:not(:disabled) { transform: scale(0.99); }
+    .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .submit-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── Progress / status ── */
+    #status-area { display: none; margin-bottom: 32px; }
+
+    .status-card {
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--gray-border);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status-text {
+      font-size: 14px;
+      color: var(--gray-mid);
+    }
+
+    .status-text strong {
+      display: block;
+      font-size: 15px;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+
+    /* ── Results ── */
+    #results-area { display: none; }
+
+    .results-header {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-bottom: 16px;
+    }
+
+    .results-title {
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--dark);
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+
+    .results-title span {
+      color: var(--red);
+    }
+
+    .match-card {
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px 32px;
+      margin-bottom: 16px;
+      border-left: 5px solid var(--gray-border);
+      transition: border-color 0.2s;
+    }
+
+    .match-card.rank-1 { border-left-color: var(--red); }
+    .match-card.rank-2 { border-left-color: var(--orange); }
+    .match-card.rank-3 { border-left-color: var(--teal); }
+
+    .match-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .match-rank {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .rank-1 .match-rank { background: var(--red); }
+    .rank-2 .match-rank { background: var(--orange); }
+    .rank-3 .match-rank { background: var(--teal); }
+
+    .match-filename {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      flex: 1;
+    }
+
+    .match-score-badge {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .rank-1 .match-score-badge { color: var(--red); }
+    .rank-2 .match-score-badge { color: var(--orange); }
+    .rank-3 .match-score-badge { color: var(--teal); }
+
+    .score-bar-track {
+      height: 6px;
+      background: var(--gray-border);
+      border-radius: 3px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.8s ease;
+    }
+
+    .rank-1 .score-bar-fill { background: var(--red); }
+    .rank-2 .score-bar-fill { background: var(--orange); }
+    .rank-3 .score-bar-fill { background: var(--teal); }
+
+    .match-changes-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 4px;
+    }
+
+    .match-changes {
+      font-size: 13px;
+      color: var(--gray-mid);
+      line-height: 1.6;
+    }
+
+    .match-changes.no-changes {
+      color: #27ae60;
+      font-weight: 600;
+    }
+
+    /* ── Error ── */
+    .error-card {
+      background: #fff5f5;
+      border: 1px solid #f5c6cb;
+      border-radius: 8px;
+      padding: 20px 28px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .error-card svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--red);
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .error-card p {
+      font-size: 14px;
+      color: var(--red);
+      font-weight: 500;
+    }
+
+    /* ── Try again button ── */
+    .try-again-btn {
+      margin-top: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      background: none;
+      border: 2px solid var(--red);
+      border-radius: 6px;
+      color: var(--red);
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .try-again-btn:hover {
+      background: var(--red);
+      color: white;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 28px;
+      font-size: 12px;
+      color: #aaa;
+      border-top: 1px solid var(--gray-border);
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 0 20px; }
+      main { padding: 32px 16px 60px; }
+      .card { padding: 24px 20px; }
+      .page-title { font-size: 22px; }
+      .match-card { padding: 18px 20px; }
+      .match-filename { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-area">
+      <div class="logo-icon">
+        <!-- Steel frame / building icon -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 21V9l9-6 9 6v12H3z" fill="none" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M9 21V15h6v6" fill="none" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M3 9h18M12 3v6" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        Queensland Steel House Frames
+        <span>Drafting Department — Copy Check Tool</span>
+      </div>
+    </div>
+    <span class="header-clearai-text">ClearAI</span>
+  </header>
+
+  <main>
+    <h1 class="page-title">Check for Existing Copies</h1>
+    <p class="page-subtitle">Upload an incoming job PDF to find the closest matching completed designs from our job library.</p>
+
+    <!-- Upload Card -->
+    <div class="card" id="upload-card">
+      <div class="card-label">Step 1 — Upload Incoming Job PDF</div>
+
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="file-input" accept=".pdf" />
+        <div class="drop-icon">
+          <!-- Upload icon -->
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="drop-title">Drop PDF here or click to browse</div>
+        <div class="drop-hint">Accepts PDF files only</div>
+      </div>
+
+      <div class="file-selected" id="file-selected">
+        <!-- File icon -->
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span class="file-selected-name" id="file-name-display">filename.pdf</span>
+        <button class="file-clear" id="file-clear" title="Remove file">×</button>
+      </div>
+
+      <button class="submit-btn" id="submit-btn" disabled>
+        <!-- Search icon -->
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Find Best Copies
+      </button>
+    </div>
+
+    <!-- Loading Status -->
+    <div id="status-area">
+      <div class="status-card">
+        <div class="spinner"></div>
+        <div class="status-text">
+          <strong>Analysing job files…</strong>
+          Comparing your upload against existing jobs in the library. This may take up to 60 seconds.
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results-area">
+      <div class="results-header">Copy Check Results</div>
+      <div class="results-title" id="results-title">
+        TOP RESULTS FOR <span id="results-filename"></span>
+      </div>
+      <div id="results-list"></div>
+      <button class="try-again-btn" id="try-again-btn">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+        Check Another Job
+      </button>
+    </div>
+
+  </main>
+
+  <footer>
+    &copy; Queensland Steel House Frames — Drafting Department Internal Tool
+  </footer>
+
+  <script>
+    const fileInput = document.getElementById('file-input');
+    const dropZone = document.getElementById('drop-zone');
+    const fileSelected = document.getElementById('file-selected');
+    const fileNameDisplay = document.getElementById('file-name-display');
+    const fileClear = document.getElementById('file-clear');
+    const submitBtn = document.getElementById('submit-btn');
+    const statusArea = document.getElementById('status-area');
+    const resultsArea = document.getElementById('results-area');
+    const resultsList = document.getElementById('results-list');
+    const resultsFilename = document.getElementById('results-filename');
+    const uploadCard = document.getElementById('upload-card');
+    const tryAgainBtn = document.getElementById('try-again-btn');
+
+    let selectedFile = null;
+
+    function setFile(file) {
+      if (!file || file.type !== 'application/pdf') {
+        alert('Please select a PDF file.');
+        return;
+      }
+      selectedFile = file;
+      fileNameDisplay.textContent = file.name;
+      fileSelected.classList.add('visible');
+      submitBtn.disabled = false;
+    }
+
+    function clearFile() {
+      selectedFile = null;
+      fileInput.value = '';
+      fileSelected.classList.remove('visible');
+      submitBtn.disabled = true;
+    }
+
+    fileInput.addEventListener('change', e => {
+      if (e.target.files[0]) setFile(e.target.files[0]);
+    });
+
+    fileClear.addEventListener('click', e => {
+      e.stopPropagation();
+      clearFile();
+    });
+
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) setFile(file);
+    });
+
+    tryAgainBtn.addEventListener('click', () => {
+      clearFile();
+      resultsArea.style.display = 'none';
+      uploadCard.style.display = 'block';
+    });
+
+    submitBtn.addEventListener('click', async () => {
+      if (!selectedFile) return;
+
+      // Show loading
+      uploadCard.style.display = 'none';
+      statusArea.style.display = 'block';
+      resultsArea.style.display = 'none';
+
+      const formData = new FormData();
+      formData.append('pdf', selectedFile);
+
+      try {
+        const response = await fetch('/api/check-copies', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (data.error === 'gemini_api_unavailable') {
+            statusArea.style.display = 'none';
+            renderError('gemini_api_unavailable', true);
+            resultsArea.style.display = 'block';
+            return;
+          }
+          throw new Error(data.error || 'An error occurred during comparison.');
+        }
+
+        statusArea.style.display = 'none';
+        renderResults(data);
+        resultsArea.style.display = 'block';
+
+      } catch (err) {
+        statusArea.style.display = 'none';
+        const isApiError = err.message && (
+          err.message.toLowerCase().includes('gemini') ||
+          err.message.toLowerCase().includes('api') ||
+          err.message.toLowerCase().includes('network') ||
+          err.message.toLowerCase().includes('fetch')
+        );
+        renderError(err.message, isApiError);
+        resultsArea.style.display = 'block';
+      }
+    });
+
+    function getDisplayName(fileName) {
+      return fileName.replace(/\.[^.]+$/, '');
+    }
+
+    function renderResults(data) {
+      resultsFilename.textContent = getDisplayName(data.inputFileName).toUpperCase() + ' — POTENTIAL COPIES';
+      resultsList.innerHTML = '';
+
+      if (!data.topMatches || data.topMatches.length === 0) {
+        resultsList.innerHTML = `
+          <div class="error-card">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>No comparable jobs found in the library.</p>
+          </div>`;
+        return;
+      }
+
+      const rankLabels = ['Match 1', 'Match 2', 'Match 3'];
+      const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
+
+      data.topMatches.forEach((match, i) => {
+        const rankNum = i + 1;
+        const rankClass = rankClasses[i] || 'rank-3';
+        const label = rankLabels[i] || `Match ${rankNum}`;
+        const score = (match.score === null || match.score === undefined || isNaN(Number(match.score))) ? 0 : Number(match.score);
+        const displayName = getDisplayName(match.fileName);
+        const changes = match.changeSummary
+          ? match.changeSummary
+          : null;
+
+        const card = document.createElement('div');
+        card.className = `match-card ${rankClass}`;
+        card.innerHTML = `
+          <div class="match-header">
+            <div class="match-rank">${rankNum}</div>
+            <div class="match-filename">${escapeHtml(displayName)}</div>
+            <div class="match-score-badge">${score}%</div>
+          </div>
+          <div class="score-bar-track">
+            <div class="score-bar-fill" style="width: 0%" data-target="${score}"></div>
+          </div>
+          <div class="match-changes-label">Changes Required</div>
+          <div class="match-changes ${score === 100 && !changes ? 'no-changes' : ''}">
+            ${score === 100 && !changes ? '&#10003; Perfect match — no changes needed' : escapeHtml(changes || 'No change details available')}
+          </div>
+        `;
+        resultsList.appendChild(card);
+
+        // Animate score bars after a tick
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            const bar = card.querySelector('.score-bar-fill');
+            bar.style.width = score + '%';
+          }, 100 + i * 150);
+        });
+      });
+    }
+
+    function renderError(message, isApiError = false) {
+      resultsFilename.textContent = 'ERROR';
+      if (isApiError) {
+        resultsList.innerHTML = `
+          <div class="api-error-card">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div>
+              <h3>AI Service Unavailable</h3>
+              <p>The Gemini API is not responding or returned an error. Please contact support for assistance.</p>
+            </div>
+          </div>`;
+      } else {
+        resultsList.innerHTML = `
+          <div class="error-card">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>${escapeHtml(message)}</p>
+          </div>`;
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+  </script>
+</body>
+</html>
