@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Check for Existing Copies | QSHF</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@400&family=Caveat:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -81,27 +81,12 @@
       text-transform: uppercase;
     }
 
-    .header-clearai-text {
-      display: flex;
-      align-items: baseline;
+    .header-clearai-logo {
+      height: 40px;
+      width: auto;
+      filter: invert(1);
+      mix-blend-mode: screen;
       user-select: none;
-    }
-
-    .header-clearai-text .clear-part {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-weight: 400;
-      font-size: 24px;
-      color: rgba(255,255,255,0.92);
-      letter-spacing: 0.01em;
-    }
-
-    .header-clearai-text .ai-part {
-      font-family: 'Caveat', cursive;
-      font-weight: 700;
-      font-size: 30px;
-      color: rgba(255,255,255,0.92);
-      letter-spacing: -0.01em;
-      line-height: 1;
     }
 
     .api-error-card {
@@ -567,9 +552,7 @@
         <span>Drafting Department — Copy Check Tool</span>
       </div>
     </div>
-    <span class="header-clearai-text">
-      <span class="clear-part">Clear</span><span class="ai-part">AI</span>
-    </span>
+    <img src="/clearai-logo.jpg" alt="ClearAI" class="header-clearai-logo" />
   </header>
 
   <main>
