@@ -9,17 +9,18 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --red: #bf1e2e;
-      --red-dark: #9e1824;
-      --red-hover: #d61440;
-      --orange: #fe8500;
-      --teal: #10b8c7;
-      --dark: #222222;
-      --gray-dark: #3c3c3c;
-      --gray-mid: #555555;
-      --gray-light: #f2f2f2;
-      --gray-border: #e7e7e7;
+      --red: #2563eb;
+      --red-dark: #1d4ed8;
+      --red-hover: #3b82f6;
+      --orange: #6366f1;
+      --teal: #06b6d4;
+      --dark: #0f172a;
+      --gray-dark: #334155;
+      --gray-mid: #64748b;
+      --gray-light: #f1f5f9;
+      --gray-border: #e2e8f0;
       --white: #ffffff;
+      --error: #dc2626;
     }
 
     body {
@@ -90,8 +91,8 @@
     }
 
     .api-error-card {
-      background: #fff5f5;
-      border: 2px solid var(--red);
+      background: #fef2f2;
+      border: 2px solid var(--error);
       border-radius: 8px;
       padding: 28px 32px;
       display: flex;
@@ -102,7 +103,7 @@
     .api-error-card svg {
       width: 28px;
       height: 28px;
-      stroke: var(--red);
+      stroke: var(--error);
       fill: none;
       stroke-width: 2;
       flex-shrink: 0;
@@ -112,7 +113,7 @@
     .api-error-card h3 {
       font-size: 16px;
       font-weight: 700;
-      color: var(--red);
+      color: var(--error);
       margin-bottom: 6px;
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -125,7 +126,7 @@
     }
 
     .api-error-card a {
-      color: var(--red);
+      color: var(--error);
       font-weight: 600;
     }
 
@@ -183,7 +184,7 @@
     .drop-zone:hover,
     .drop-zone.dragover {
       border-color: var(--red);
-      background: #fdf5f6;
+      background: #eff6ff;
     }
 
     .drop-zone input[type="file"] {
@@ -199,7 +200,7 @@
       width: 52px;
       height: 52px;
       margin: 0 auto 14px;
-      background: #fdecea;
+      background: #dbeafe;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -233,7 +234,7 @@
       align-items: center;
       gap: 10px;
       padding: 12px 16px;
-      background: #f0fafb;
+      background: #e0f2fe;
       border: 1px solid var(--teal);
       border-radius: 6px;
       margin-top: 16px;
@@ -465,8 +466,8 @@
 
     /* ── Error ── */
     .error-card {
-      background: #fff5f5;
-      border: 1px solid #f5c6cb;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
       border-radius: 8px;
       padding: 20px 28px;
       display: flex;
@@ -477,7 +478,7 @@
     .error-card svg {
       width: 20px;
       height: 20px;
-      stroke: var(--red);
+      stroke: var(--error);
       fill: none;
       stroke-width: 2;
       flex-shrink: 0;
@@ -486,7 +487,7 @@
 
     .error-card p {
       font-size: 14px;
-      color: var(--red);
+      color: var(--error);
       font-weight: 500;
     }
 
