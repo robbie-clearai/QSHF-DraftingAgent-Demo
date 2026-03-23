@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const axios = require('axios');
@@ -7,8 +8,8 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const GEMINI_API_KEY = 'AIzaSyAbhpc-iiH7f_GbxIWJLrfhnPLvQAhl9rs';
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 const DATA_DIR = path.join(__dirname, 'data');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 
