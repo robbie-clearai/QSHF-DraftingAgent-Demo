@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Check for Existing Copies | QSHF</title>
+  <title>Copy Check Tool | QSHF</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -55,7 +55,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background 0.15s;
     }
+
+    .logo-icon:hover { background: var(--red-hover); }
 
     .logo-icon svg {
       width: 28px;
@@ -81,6 +88,28 @@
       text-transform: uppercase;
     }
 
+    /* ── Header Nav ── */
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-link {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .nav-link:hover { color: white; background: rgba(255,255,255,0.08); }
+    .nav-link.active { color: white; }
+
     .header-clearai-logo {
       height: 44px;
       width: auto;
@@ -88,46 +117,6 @@
       mix-blend-mode: screen;
       user-select: none;
       flex-shrink: 0;
-    }
-
-    .api-error-card {
-      background: #fef2f2;
-      border: 2px solid var(--error);
-      border-radius: 8px;
-      padding: 28px 32px;
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .api-error-card svg {
-      width: 28px;
-      height: 28px;
-      stroke: var(--error);
-      fill: none;
-      stroke-width: 2;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .api-error-card h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--error);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .api-error-card p {
-      font-size: 14px;
-      color: var(--gray-dark);
-      line-height: 1.6;
-    }
-
-    .api-error-card a {
-      color: var(--error);
-      font-weight: 600;
     }
 
     /* ── Main layout ── */
@@ -367,9 +356,7 @@
       line-height: 1.3;
     }
 
-    .results-title span {
-      color: var(--red);
-    }
+    .results-title span { color: var(--red); }
 
     .match-card {
       background: var(--white);
@@ -419,7 +406,6 @@
     .match-score-badge {
       font-size: 22px;
       font-weight: 700;
-      color: var(--dark);
     }
 
     .rank-1 .match-score-badge { color: var(--red); }
@@ -450,7 +436,7 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #aaa;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
     }
 
     .match-changes {
@@ -464,7 +450,30 @@
       font-weight: 600;
     }
 
-    /* ── Error ── */
+    /* ── Changes dot-point list ── */
+    .changes-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .changes-list li {
+      display: flex;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--gray-mid);
+      padding: 3px 0;
+      line-height: 1.5;
+    }
+
+    .changes-list li::before {
+      content: '•';
+      color: var(--red);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── Error cards ── */
     .error-card {
       background: #fef2f2;
       border: 1px solid #fecaca;
@@ -491,9 +500,50 @@
       font-weight: 500;
     }
 
-    /* ── Try again button ── */
-    .try-again-btn {
+    .api-error-card {
+      background: #fef2f2;
+      border: 2px solid var(--error);
+      border-radius: 8px;
+      padding: 28px 32px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .api-error-card svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--error);
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .api-error-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--error);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .api-error-card p {
+      font-size: 14px;
+      color: var(--gray-dark);
+      line-height: 1.6;
+    }
+
+    /* ── Action buttons row ── */
+    .action-buttons {
       margin-top: 24px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .try-again-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -511,10 +561,27 @@
       transition: background 0.15s, color 0.15s;
     }
 
-    .try-again-btn:hover {
+    .try-again-btn:hover { background: var(--red); color: white; }
+
+    .redo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
       background: var(--red);
+      border: 2px solid var(--red);
+      border-radius: 6px;
       color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
     }
+
+    .redo-btn:hover { background: var(--red-dark); border-color: var(--red-dark); }
 
     /* ── Footer ── */
     footer {
@@ -525,13 +592,168 @@
       border-top: 1px solid var(--gray-border);
     }
 
-    @media (max-width: 600px) {
+    /* ── History page ── */
+    .history-empty {
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 48px 40px;
+      text-align: center;
+      color: var(--gray-mid);
+      font-size: 14px;
+    }
+
+    .history-table {
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+
+    .history-table-header {
+      display: grid;
+      grid-template-columns: 1fr 170px 130px 110px 32px;
+      gap: 12px;
+      padding: 12px 24px;
+      background: var(--gray-light);
+      border-bottom: 2px solid var(--gray-border);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+    }
+
+    .history-table-header div:nth-child(4) { text-align: center; }
+
+    .history-row-wrapper {
+      border-bottom: 1px solid var(--gray-border);
+    }
+
+    .history-row-wrapper:last-child { border-bottom: none; }
+
+    .history-row {
+      display: grid;
+      grid-template-columns: 1fr 170px 130px 110px 32px;
+      gap: 12px;
+      padding: 14px 24px;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.15s;
+      user-select: none;
+    }
+
+    .history-row:hover { background: #f8fafc; }
+    .history-row.expanded { background: #f8fafc; }
+
+    .history-job-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history-timestamp {
+      font-size: 12px;
+      color: var(--gray-mid);
+    }
+
+    .history-status {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 3px 10px;
+      border-radius: 12px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .status-success { background: #dcfce7; color: #16a34a; }
+    .status-no-results { background: #fef9c3; color: #b45309; }
+    .status-failed { background: #fee2e2; color: #dc2626; }
+
+    .history-copies-count {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--dark);
+      text-align: center;
+    }
+
+    .history-expand-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-mid);
+      transition: transform 0.2s;
+    }
+
+    .history-row.expanded .history-expand-icon { transform: rotate(180deg); }
+
+    .history-detail {
+      display: none;
+      padding: 4px 24px 20px;
+      background: #f8fafc;
+      border-top: 1px solid var(--gray-border);
+    }
+
+    .history-detail.visible { display: block; }
+
+    .history-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+      padding-top: 16px;
+    }
+
+    .history-match-card {
+      background: var(--white);
+      border-radius: 6px;
+      padding: 14px 18px;
+      border-left: 4px solid var(--gray-border);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .history-match-card.rank-1 { border-left-color: var(--red); }
+    .history-match-card.rank-2 { border-left-color: var(--orange); }
+    .history-match-card.rank-3 { border-left-color: var(--teal); }
+
+    .history-match-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .history-match-score {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .history-match-card.rank-1 .history-match-score { color: var(--red); }
+    .history-match-card.rank-2 .history-match-score { color: var(--orange); }
+    .history-match-card.rank-3 .history-match-score { color: var(--teal); }
+
+    .history-match-changes {
+      font-size: 12px;
+      color: var(--gray-mid);
+    }
+
+    .history-match-changes .changes-list li { font-size: 12px; }
+
+    @media (max-width: 700px) {
       header { padding: 0 20px; }
       main { padding: 32px 16px 60px; }
       .card { padding: 24px 20px; }
       .page-title { font-size: 22px; }
       .match-card { padding: 18px 20px; }
       .match-filename { font-size: 14px; }
+      .header-clearai-logo { display: none; }
+      .history-table { overflow-x: auto; }
+      .history-table-header,
+      .history-row { min-width: 560px; }
     }
   </style>
 </head>
@@ -540,100 +762,147 @@
   <!-- Header -->
   <header>
     <div class="logo-area">
-      <div class="logo-icon">
-        <!-- Steel frame / building icon -->
+      <button class="logo-icon" id="logo-home-btn" title="Go to home">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M3 21V9l9-6 9 6v12H3z" fill="none" stroke="white" stroke-width="2" stroke-linejoin="round"/>
           <path d="M9 21V15h6v6" fill="none" stroke="white" stroke-width="2" stroke-linejoin="round"/>
           <path d="M3 9h18M12 3v6" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-      </div>
+      </button>
       <div class="logo-text">
         Queensland Steel House Frames
         <span>Drafting Department — Copy Check Tool</span>
       </div>
     </div>
+    <nav class="header-nav">
+      <a href="#" id="nav-home-link" class="nav-link active">Copy Check</a>
+      <a href="#" id="nav-history-link" class="nav-link">History</a>
+    </nav>
     <img src="/clearai-logo.png" alt="ClearAI" class="header-clearai-logo" />
   </header>
 
-  <main>
-    <h1 class="page-title">Check for Existing Copies</h1>
-    <p class="page-subtitle">Upload an incoming job PDF to find the closest matching completed designs from our job library.</p>
+  <!-- ── Home Page ── -->
+  <div id="page-home">
+    <main>
+      <h1 class="page-title">Check for Existing Copies</h1>
+      <p class="page-subtitle">Upload an incoming job PDF to find the closest matching completed designs from our job library.</p>
 
-    <!-- Upload Card -->
-    <div class="card" id="upload-card">
-      <div class="card-label">Step 1 — Upload Incoming Job PDF</div>
+      <!-- Upload Card -->
+      <div class="card" id="upload-card">
+        <div class="card-label">Step 1 — Upload Incoming Job PDF</div>
 
-      <div class="drop-zone" id="drop-zone">
-        <input type="file" id="file-input" accept=".pdf" />
-        <div class="drop-icon">
-          <!-- Upload icon -->
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" id="file-input" accept=".pdf" />
+          <div class="drop-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="drop-title">Drop PDF here or click to browse</div>
+          <div class="drop-hint">Accepts PDF files only</div>
         </div>
-        <div class="drop-title">Drop PDF here or click to browse</div>
-        <div class="drop-hint">Accepts PDF files only</div>
+
+        <div class="file-selected" id="file-selected">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="file-selected-name" id="file-name-display">filename.pdf</span>
+          <button class="file-clear" id="file-clear" title="Remove file">×</button>
+        </div>
+
+        <button class="submit-btn" id="submit-btn" disabled>
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Find Best Copies
+        </button>
       </div>
 
-      <div class="file-selected" id="file-selected">
-        <!-- File icon -->
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        <span class="file-selected-name" id="file-name-display">filename.pdf</span>
-        <button class="file-clear" id="file-clear" title="Remove file">×</button>
-      </div>
-
-      <button class="submit-btn" id="submit-btn" disabled>
-        <!-- Search icon -->
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        Find Best Copies
-      </button>
-    </div>
-
-    <!-- Loading Status -->
-    <div id="status-area">
-      <div class="status-card">
-        <div class="spinner"></div>
-        <div class="status-text">
-          <strong>Analysing job files…</strong>
-          Comparing your upload against existing jobs in the library. This may take up to 60 seconds.
+      <!-- Loading Status -->
+      <div id="status-area">
+        <div class="status-card">
+          <div class="spinner"></div>
+          <div class="status-text">
+            <strong>Analysing job files…</strong>
+            Comparing your upload against existing jobs in the library. This may take up to 60 seconds.
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Results -->
-    <div id="results-area">
-      <div class="results-header">Copy Check Results</div>
-      <div class="results-title" id="results-title">
-        TOP RESULTS FOR <span id="results-filename"></span>
+      <!-- Results -->
+      <div id="results-area">
+        <div class="results-header">Copy Check Results</div>
+        <div class="results-title">
+          TOP RESULTS FOR <span id="results-filename"></span>
+        </div>
+        <div id="results-list"></div>
+        <div class="action-buttons">
+          <button class="try-again-btn" id="try-again-btn">
+            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+            Check Another Job
+          </button>
+          <button class="redo-btn" id="redo-btn">
+            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-4.5"/></svg>
+            Redo Job Again
+          </button>
+        </div>
       </div>
-      <div id="results-list"></div>
-      <button class="try-again-btn" id="try-again-btn">
-        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
-        Check Another Job
-      </button>
-    </div>
 
-  </main>
+    </main>
+  </div>
+
+  <!-- ── History Page ── -->
+  <div id="page-history" style="display:none">
+    <main>
+      <h1 class="page-title">Copy Check History</h1>
+      <p class="page-subtitle">Past copy check searches made in this browser.</p>
+      <div id="history-content"></div>
+    </main>
+  </div>
 
   <footer>
     &copy; 2026 ClearAI — Built for Queensland Steel House Frames
   </footer>
 
   <script>
-    const fileInput = document.getElementById('file-input');
-    const dropZone = document.getElementById('drop-zone');
-    const fileSelected = document.getElementById('file-selected');
+    // ── DOM refs ──
+    const fileInput       = document.getElementById('file-input');
+    const dropZone        = document.getElementById('drop-zone');
+    const fileSelected    = document.getElementById('file-selected');
     const fileNameDisplay = document.getElementById('file-name-display');
-    const fileClear = document.getElementById('file-clear');
-    const submitBtn = document.getElementById('submit-btn');
-    const statusArea = document.getElementById('status-area');
-    const resultsArea = document.getElementById('results-area');
-    const resultsList = document.getElementById('results-list');
+    const fileClear       = document.getElementById('file-clear');
+    const submitBtn       = document.getElementById('submit-btn');
+    const statusArea      = document.getElementById('status-area');
+    const resultsArea     = document.getElementById('results-area');
+    const resultsList     = document.getElementById('results-list');
     const resultsFilename = document.getElementById('results-filename');
-    const uploadCard = document.getElementById('upload-card');
-    const tryAgainBtn = document.getElementById('try-again-btn');
+    const uploadCard      = document.getElementById('upload-card');
+    const tryAgainBtn     = document.getElementById('try-again-btn');
+    const redoBtn         = document.getElementById('redo-btn');
+    const pageHome        = document.getElementById('page-home');
+    const pageHistory     = document.getElementById('page-history');
+    const navHomeLink     = document.getElementById('nav-home-link');
+    const navHistoryLink  = document.getElementById('nav-history-link');
+    const logoHomeBtn     = document.getElementById('logo-home-btn');
 
     let selectedFile = null;
+    let lastSubmittedFile = null;
 
+    // ── Navigation ──
+    function showPage(page) {
+      if (page === 'home') {
+        pageHome.style.display = '';
+        pageHistory.style.display = 'none';
+        navHomeLink.classList.add('active');
+        navHistoryLink.classList.remove('active');
+      } else {
+        pageHome.style.display = 'none';
+        pageHistory.style.display = '';
+        navHomeLink.classList.remove('active');
+        navHistoryLink.classList.add('active');
+        renderHistoryPage();
+      }
+    }
+
+    logoHomeBtn.addEventListener('click', () => showPage('home'));
+    navHomeLink.addEventListener('click', e => { e.preventDefault(); showPage('home'); });
+    navHistoryLink.addEventListener('click', e => { e.preventDefault(); showPage('history'); });
+
+    // ── File handling ──
     function setFile(file) {
       if (!file || file.type !== 'application/pdf') {
         alert('Please select a PDF file.');
@@ -681,16 +950,25 @@
       uploadCard.style.display = 'block';
     });
 
-    submitBtn.addEventListener('click', async () => {
-      if (!selectedFile) return;
+    redoBtn.addEventListener('click', () => {
+      if (lastSubmittedFile) runCopyCheck(lastSubmittedFile);
+    });
 
-      // Show loading
+    submitBtn.addEventListener('click', () => {
+      if (!selectedFile) return;
+      runCopyCheck(selectedFile);
+    });
+
+    // ── Core copy check ──
+    async function runCopyCheck(file) {
+      lastSubmittedFile = file;
+
       uploadCard.style.display = 'none';
       statusArea.style.display = 'block';
       resultsArea.style.display = 'none';
 
       const formData = new FormData();
-      formData.append('pdf', selectedFile);
+      formData.append('pdf', file);
 
       try {
         const response = await fetch('/api/check-copies', {
@@ -705,6 +983,7 @@
             statusArea.style.display = 'none';
             renderError('gemini_api_unavailable', true);
             resultsArea.style.display = 'block';
+            saveHistory({ fileName: file.name, status: 'failed', matchesAbove75: 0, topMatches: [] });
             return;
           }
           throw new Error(data.error || 'An error occurred during comparison.');
@@ -713,6 +992,10 @@
         statusArea.style.display = 'none';
         renderResults(data);
         resultsArea.style.display = 'block';
+
+        const above75 = (data.topMatches || []).filter(m => Number(m.score) >= 75).length;
+        const status = (!data.topMatches || data.topMatches.length === 0) ? 'no_results' : 'success';
+        saveHistory({ fileName: file.name, status, matchesAbove75: above75, topMatches: data.topMatches || [] });
 
       } catch (err) {
         statusArea.style.display = 'none';
@@ -724,11 +1007,125 @@
         );
         renderError(err.message, isApiError);
         resultsArea.style.display = 'block';
+        saveHistory({ fileName: file.name, status: 'failed', matchesAbove75: 0, topMatches: [] });
       }
-    });
+    }
 
+    // ── History storage ──
+    const HISTORY_KEY = 'qshf_copycheck_history';
+
+    function loadHistory() {
+      try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+      catch { return []; }
+    }
+
+    function saveHistory(entry) {
+      const history = loadHistory();
+      history.unshift({
+        id: Date.now(),
+        fileName: entry.fileName,
+        displayName: getDisplayName(entry.fileName),
+        timestamp: new Date().toISOString(),
+        status: entry.status,
+        matchesAbove75: entry.matchesAbove75,
+        topMatches: entry.topMatches
+      });
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 50)));
+    }
+
+    function formatTimestamp(iso) {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+        + ', ' + d.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // ── History page render ──
+    function renderHistoryPage() {
+      const historyContent = document.getElementById('history-content');
+      const history = loadHistory();
+
+      if (history.length === 0) {
+        historyContent.innerHTML = `<div class="history-empty">No copy check searches yet. Go to <strong>Copy Check</strong> to analyse a job.</div>`;
+        return;
+      }
+
+      const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
+
+      let html = `
+        <div class="history-table">
+          <div class="history-table-header">
+            <div>Job Name</div>
+            <div>Date &amp; Time</div>
+            <div>Status</div>
+            <div>Copies &ge;75%</div>
+            <div></div>
+          </div>`;
+
+      history.forEach((entry, idx) => {
+        const statusClass = entry.status === 'success' ? 'status-success'
+          : entry.status === 'no_results' ? 'status-no-results' : 'status-failed';
+        const statusLabel = entry.status === 'success' ? 'Results Found'
+          : entry.status === 'no_results' ? 'No Results' : 'Failed';
+
+        let detailHtml = '';
+        if (entry.topMatches && entry.topMatches.length > 0) {
+          detailHtml = `<div class="history-detail-grid">`;
+          entry.topMatches.forEach((match, i) => {
+            const rankClass = rankClasses[i] || 'rank-3';
+            const score = Number(match.score) || 0;
+            detailHtml += `
+              <div class="history-match-card ${rankClass}">
+                <div class="history-match-name">${escapeHtml(getDisplayName(match.fileName))}</div>
+                <div class="history-match-score">${score}%</div>
+                <div class="history-match-changes">${buildChangesList(match.changeSummary)}</div>
+              </div>`;
+          });
+          detailHtml += `</div>`;
+        } else {
+          detailHtml = `<p style="font-size:13px;color:var(--gray-mid);padding:12px 0">No match details available.</p>`;
+        }
+
+        html += `
+          <div class="history-row-wrapper">
+            <div class="history-row" data-idx="${idx}">
+              <div class="history-job-name" title="${escapeHtml(entry.fileName)}">${escapeHtml(entry.displayName)}</div>
+              <div class="history-timestamp">${formatTimestamp(entry.timestamp)}</div>
+              <div><span class="history-status ${statusClass}">${statusLabel}</span></div>
+              <div class="history-copies-count">${entry.matchesAbove75}</div>
+              <div class="history-expand-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="history-detail" id="history-detail-${idx}">${detailHtml}</div>
+          </div>`;
+      });
+
+      html += `</div>`;
+      historyContent.innerHTML = html;
+
+      historyContent.querySelectorAll('.history-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const idx = row.dataset.idx;
+          const detail = document.getElementById(`history-detail-${idx}`);
+          const isExpanded = row.classList.contains('expanded');
+          row.classList.toggle('expanded', !isExpanded);
+          detail.classList.toggle('visible', !isExpanded);
+        });
+      });
+    }
+
+    // ── Render helpers ──
     function getDisplayName(fileName) {
       return fileName.replace(/\.[^.]+$/, '');
+    }
+
+    function buildChangesList(changeSummary) {
+      if (!changeSummary) {
+        return '<span style="color:#27ae60;font-weight:600">&#10003; No changes needed</span>';
+      }
+      const items = changeSummary.split(/,\s+/).map(s => s.trim()).filter(Boolean);
+      if (items.length === 0) return escapeHtml(changeSummary);
+      return '<ul class="changes-list">' + items.map(item => `<li>${escapeHtml(item)}</li>`).join('') + '</ul>';
     }
 
     function renderResults(data) {
@@ -744,18 +1141,17 @@
         return;
       }
 
-      const rankLabels = ['Match 1', 'Match 2', 'Match 3'];
       const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
 
       data.topMatches.forEach((match, i) => {
         const rankNum = i + 1;
         const rankClass = rankClasses[i] || 'rank-3';
-        const label = rankLabels[i] || `Match ${rankNum}`;
         const score = (match.score === null || match.score === undefined || isNaN(Number(match.score))) ? 0 : Number(match.score);
         const displayName = getDisplayName(match.fileName);
-        const changes = match.changeSummary
-          ? match.changeSummary
-          : null;
+
+        const changesHtml = (score === 100 && !match.changeSummary)
+          ? `<div class="match-changes no-changes">&#10003; Perfect match — no changes needed</div>`
+          : `<div class="match-changes">${buildChangesList(match.changeSummary)}</div>`;
 
         const card = document.createElement('div');
         card.className = `match-card ${rankClass}`;
@@ -769,17 +1165,13 @@
             <div class="score-bar-fill" style="width: 0%" data-target="${score}"></div>
           </div>
           <div class="match-changes-label">Changes Required</div>
-          <div class="match-changes ${score === 100 && !changes ? 'no-changes' : ''}">
-            ${score === 100 && !changes ? '&#10003; Perfect match — no changes needed' : escapeHtml(changes || 'No change details available')}
-          </div>
+          ${changesHtml}
         `;
         resultsList.appendChild(card);
 
-        // Animate score bars after a tick
         requestAnimationFrame(() => {
           setTimeout(() => {
-            const bar = card.querySelector('.score-bar-fill');
-            bar.style.width = score + '%';
+            card.querySelector('.score-bar-fill').style.width = score + '%';
           }, 100 + i * 150);
         });
       });
@@ -806,6 +1198,7 @@
     }
 
     function escapeHtml(str) {
+      if (!str) return '';
       return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
   </script>
